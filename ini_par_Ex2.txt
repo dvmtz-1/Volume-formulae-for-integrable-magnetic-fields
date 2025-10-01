@@ -1,0 +1,16 @@
+#     #         | Values used in paper
+20    # [0] tf  | 20
+0.78  # [1] y1
+0.007 # [2] eps | 0.007
+2     # [3] m   | 2
+1     # [4] n   | 1
+0.25  # [5] w1  | 0.25
+1     # [6] w2  | 1
+2     # [7] R0  | 2
+# Integration parameters
+100   # [8] Ny ~ Eq(1)
+100   # [9] Nz ~ Eq(1)
+50    # [10] Npsi ~ Thm3', Thm44 & Eq(A1) 
+6     # [11] Ng ~ Thm 3' | 6
+50    # [12] Nth ~ Eq(A1) 
+10    # [13] Nc ~ Thm4

@@ -1,0 +1,9 @@
+#     #         | Values used in paper
+20    # [0] tf  | 20
+0.5  # [1] r1
+# Integration parameters
+60   # [2] Ny ~ Eq(1)
+60   # [3] Nz ~ Eq(1)
+50    # [4] Npsi ~ Thm1, & Eq(A1) 
+50    # [5] Ng ~ Eq(A1) 
+
