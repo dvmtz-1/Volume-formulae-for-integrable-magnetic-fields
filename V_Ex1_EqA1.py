@@ -13,12 +13,6 @@ Input: 'ini_par_Ex1.txt'
 import numpy as np
 
 from scipy.integrate import odeint
-# import simplejson
-# import json
-# import re
-# import random
-#import stringify
-# import matplotlib.pyplot as plt
 
 import time
 import datetime
@@ -164,19 +158,18 @@ Ng = int(data[5])
 # - = - = - = - = - = - = - = - = - = - = - = - = - = - =
 
 ## Interval of \Psi to integrate # = = = = = = = = = = 
-# pnt_list0 = [[1.001,0.0], [1.8,0.0]]
 pnt_list0 = [[1.001,0.0], [1+rr1,0.0]]
 
 
 ## Psi partition / / / / / / / / / / / / / / / / / / 
-E0 = energy(pnt_list0[0][0],pnt_list0[0][1])
-E1 = energy(pnt_list0[1][0],pnt_list0[1][1])
-print('E0 = ',E0, '[y,z] =  [', pnt_list0[0][0],pnt_list0[0][1],']')
-print('E1 = ',E1, '[y,z] =  [', pnt_list0[1][0],pnt_list0[1][1],']')
+Psi0 = energy(pnt_list0[0][0],pnt_list0[0][1])
+Psi1 = energy(pnt_list0[1][0],pnt_list0[1][1])
+print('Psi0 = ',"{:.6f}".format(Psi0), '[y,z] =  [', pnt_list0[0][0],pnt_list0[0][1],']')
+print('Psi1 = ',"{:.6f}".format(Psi1), '[y,z] =  [', pnt_list0[1][0],pnt_list0[1][1],']')
 
 # Initial conditions with equipartition on Energy
 pnt_list = Psi_partition(pnt_list0[0],pnt_list0[1],NPsi-1)
-## Psi partition / / / / / / / / / / / / / / / / / /
+## / / / / / / / / / / / / / / / / / / / / / / / / /
 
 
 pnt0 = pnt_list0[0]
@@ -204,12 +197,10 @@ for i in range(len(pnt_list)):
     
     ## Contour of level \Psi(x0,y0) ~ ~ ~
     Psi = energy(x0,z0)
-#     if i==0: print('sqrt(2 Psi_0)',np.sqrt(2*Elvl))
     
     for j in range(Ng):
-#         thetam = 2*np.pi*j/Ng
-        Dtheta = 2*np.pi/Ng
-        thetam = Dtheta*j
+        Dtheta = 2*np.pi/Ng # Δθ
+        thetam = Dtheta*j   # Δθ*j
         
         # nu_m
         x1 , z1 =  1+(np.sqrt(2*Psi))*np.cos(thetam), np.sqrt(2*Psi) * np.sin(thetam)
@@ -217,6 +208,7 @@ for i in range(len(pnt_list)):
 
         # i_e λ = |sqrt(g)| * e . (n x B)
         leB = (C *np.sin(Dtheta)/x1)
+
 
         ## integrate(T λ)  ~ sum ( T  i_e λ ) ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
         
@@ -233,7 +225,6 @@ for i in range(len(pnt_list)):
             N1 = mod2pi(Xc2[-1][1])[1]
         
             Xc= np.vstack([Xc,Xc2])
-            print('t was insuficient for 1 poloidal cross')
 
         
         k=1 
@@ -241,22 +232,25 @@ for i in range(len(pnt_list)):
         for jj in findcrossings(Xc):
             tt=0    
             Yc , dt2 = refine_crossing(Xc[jj],k,tf1/Num)
-            while j > len(t):
+            while j >= len(t):
                 jj = jj-len(t)
                 tt += tf1
-            T = tt+t[jj-1] +dt2
+            T = tt+t[jj] +dt2 # Return time T
 
+            if T> 7: print(Psi,'T = ',T,'[Rj, zj] = [',x1,z1,']', energy(x1,z1))
             i2 +=1
-            if i2 ==2: 
+            if i2 ==1: 
                 AvTl = AvTl + T*leB
                 break
 
     Vol = Vol + AvTl
     
 
+print('  Av(Tl)     Vol   Vol/4π^2 (Npsi)  [Ng]')
 
-print('AvTL = ', Vol, '|| Vol = ', "{:.6f}".format((2/3)*Vol*(E1- E0)/NPsi), '(',NPsi,')', '[',Ng,']')
-# print('Vol = ', "{:.6f}".format((2/3)*Vol*(E1- E0)/NPsi))
+print("{:.6f}".format(Vol/NPsi),  "{:.6f}".format((2/3)*Vol*(Psi1- Psi0)/NPsi),
+      "{:.6f}".format(Vol*(Psi1- Psi0)/(4*NPsi*np.pi**2)), '(',NPsi,')', '[',Ng,']')
+
 
 
 
